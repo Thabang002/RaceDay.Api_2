@@ -6,9 +6,6 @@ using RaceDay.Api.Models.Entities;
 
 namespace RaceDay.Api.Services;
 
-public interface ITokenService
-{
-    string GenerateToken(User user);
-}
+public interface ITokenService { string GenerateToken(User user); }
 
 
