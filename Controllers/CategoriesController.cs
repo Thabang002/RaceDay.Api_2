@@ -54,3 +54,22 @@ public class CategoriesController : ControllerBase
     [HttpPut("categories/{id}")]
     [Authorize(Roles = "Organiser")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
+    {
+        var c = await _db.Categories.FindAsync(id);
+        if (c == null) return NotFound();
+
+        var ev = await _db.Events.FindAsync(c.EventId);
+        if (ev == null) return NotFound();
+        if (ev.CreatedBy != CurrentUserId) return Forbid();
+
+        c.Name = dto.Name;
+        c.Description = dto.Description;
+        c.DistanceKm = dto.DistanceKm;
+        c.StartFee = dto.StartFee;
+        c.MaxParticipants = dto.MaxParticipants;
+
+        await _db.SaveChangesAsync();
+
+        return Ok(new CategoryDto(c.CategoryId, c.EventId, c.Name, c.Description, c.DistanceKm, c.StartFee, c.MaxParticipants));
+    }
+}
