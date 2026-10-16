@@ -1,6 +1,8 @@
-﻿namespace RaceDay.Api.Services
+﻿namespace RaceDay.Api.Services;
+
+public interface IPasswordHasher
 {
-    public class IPasswordHasher
-    {
-    }
+    string Hash(string password);
+    bool Verify(string password, string hash);
 }
+
